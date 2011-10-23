@@ -22,11 +22,25 @@ public class Game extends javax.swing.JFrame {
     int playerState = Box.StateCross;
     Box[] boxes;
     
+    Client client;
+    
     /** Creates new form Game */
     public Game() {
         initComponents();
         this.initBoxes();
+        
+        this.initClient();
         this.displayPlayerState();
+    }
+    
+    // game play
+    void play () {
+        String line = this.client.read();
+    }
+    
+    void initClient () {
+        this.client = new Client("localhost", 9999, this);
+        this.client.start();
     }
     
     void initBoxes () {

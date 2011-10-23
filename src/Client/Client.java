@@ -17,9 +17,12 @@ public class Client extends SharedThread {
     String host;
     int port;
     
-    Client(String host, int port) {
+    Game game;
+    
+    Client(String host, int port, Game game) {
         this.host = host;
         this.port = port;
+        this.game = game;
         
         try {
             this.socket = new Socket(this.host, this.port);
@@ -31,12 +34,6 @@ public class Client extends SharedThread {
     }
     
     public void process() {
-        this.send("test message");
-        this.waitForInput();
-    }
-    
-    public static void main(String[] args) {
-        Client client = new Client("localhost", 9999);
-        client.start();
+        this.game.play();
     }
 }

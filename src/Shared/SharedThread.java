@@ -16,7 +16,6 @@ public abstract class SharedThread extends Thread {
     public Socket socket;
     public DataOutputStream os;
     public DataInputStream is;
-    public String line;
     
     public void process() {
         
@@ -36,24 +35,24 @@ public abstract class SharedThread extends Thread {
         this.process();
     }
     
-    public void waitForInput() {
+    public String read() {
         
         System.out.println("Waiting for input ...");
         
-        this.line = "";
+        String line;
         while (true) {
             try {
                 try {
-                    this.line = is.readUTF();
+                    line = is.readUTF();
                 } catch (EOFException e) {
-                    this.line = "";
+                    line = "";
                 }
                 
-                if (this.line.isEmpty()) {
+                if (line.isEmpty()) {
                     this.sleep(10);
                 } else {
-                    System.out.println("Received: " + this.line);
-                    break;
+                    System.out.println("Received: " + line);
+                    return line;
                 }
                 
             } catch (InterruptedException e) {

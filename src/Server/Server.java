@@ -20,6 +20,6 @@ public class Server extends SharedThread {
  
     @Override
     public void process() {
-        this.waitForInput();
+        
     }
 }
