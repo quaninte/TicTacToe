@@ -18,24 +18,67 @@ import javax.swing.*;
  */
 public class Game extends javax.swing.JFrame {
 
-    int totalBox = 9;
-    int playerState = Box.StateCross;
+    private int totalBox = 9;
+    private int playerState;
+    private int opponentState;
     Box[] boxes;
+    
+    boolean lock = true;
     
     Client client;
     
     /** Creates new form Game */
     public Game() {
+        super("Quan MT - TicTacToe");
         initComponents();
         this.initBoxes();
         
         this.initClient();
-        this.displayPlayerState();
     }
     
     // game play
     void play () {
-        String line = this.client.read();
+        while (true) {
+            String[] parts = this.client.read();
+            this.processMessage(parts[0], parts[1]);
+        }
+    }
+    
+    /** Messages receiving
+     * playerState|1 - set state
+     * opponentChose|7 - opponent chose box 7
+     * unlock|1 - unlock
+     * result|win - result win
+     * result|lose - result lose
+     */
+    void processMessage (String type, String data) {
+        // set player sate
+        if (type.equals("playerState")) {
+            this.playerState = Integer.valueOf(data);
+            if (this.playerState == Box.StateCircle) {
+                this.opponentState = Box.StateCross;
+            } else {
+                this.opponentState = Box.StateCircle;
+            }
+            this.displayPlayerState();
+        } else if (type.equals("unlock")) {
+            this.lock = false;
+            this.message.setText("Đến lượt bạn!");
+        } else if (type.equals("opponentChose")) {
+            int index = Integer.valueOf(data);
+            this.boxes[index].changeState(this.opponentState);
+            this.lock = false;
+            this.message.setText("Đến lượt bạn!");
+        } else if (type.equals("result")) {
+            this.lock = true;
+            String result;
+            if (data.equals("win")) {
+                result = "Thắng";
+            } else {
+                result = "Thua";
+            }
+            this.message.setText(result);
+        }
     }
     
     void initClient () {
@@ -150,9 +193,9 @@ public class Game extends javax.swing.JFrame {
             }
         });
 
-        message.setText("Message");
+        message.setText(" ");
 
-        playerStateLabel.setText("O");
+        playerStateLabel.setText(" ");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -301,8 +344,11 @@ public class Game extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void chose(int i) {
-        if (this.boxes[i].getState() == Box.StateBlank) {
+        if (lock != true && this.boxes[i].getState() == Box.StateBlank) {
             this.boxes[i].changeState(this.playerState);
+            this.lock = true;
+            this.message.setText("Đợi đối thủ đánh");
+            this.client.send("chose", String.valueOf(i));
         }
     }
 }

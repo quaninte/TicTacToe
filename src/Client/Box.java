@@ -13,9 +13,9 @@ import javax.swing.*;
  */
 public class Box {
     
-    static final int StateBlank = 0;
-    static final int StateCircle = 1;
-    static final int StateCross = 2;
+    public static final int StateBlank = 0;
+    public static final int StateCircle = 1;
+    public static final int StateCross = 2;
     private int state;
     
     JButton button;

@@ -183,12 +183,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="message">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Message"/>
+        <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="playerStateLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="O"/>
+        <Property name="text" type="java.lang.String" value=" "/>
       </Properties>
     </Component>
   </SubComponents>

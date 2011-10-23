@@ -35,7 +35,7 @@ public abstract class SharedThread extends Thread {
         this.process();
     }
     
-    public String read() {
+    public String[] read() {
         
         System.out.println("Waiting for input ...");
         
@@ -52,7 +52,9 @@ public abstract class SharedThread extends Thread {
                     this.sleep(10);
                 } else {
                     System.out.println("Received: " + line);
-                    return line;
+                    
+                    String[] parts = line.split("\\|");
+                    return parts;
                 }
                 
             } catch (InterruptedException e) {
@@ -63,8 +65,9 @@ public abstract class SharedThread extends Thread {
         }
     }
     
-    public void send(String message) {
+    public void send(String type, String data) {
         try {
+            String message = type + "|" + data;
             this.os.writeUTF(message);
             System.out.println("Sent: " + message);
         } catch (IOException e) {
