@@ -32,16 +32,19 @@ public class Game extends javax.swing.JFrame {
         super("Quan MT - TicTacToe");
         initComponents();
         this.initBoxes();
-        
-        this.initClient();
     }
     
     // game play
     void play () {
         while (true) {
             String[] parts = this.client.read();
-            this.processMessage(parts[0], parts[1]);
+            
+            if (this.processMessage(parts[0], parts[1])) {
+                break;
+            }
         }
+        
+        this.client.close();
     }
     
     /** Messages receiving
@@ -51,7 +54,7 @@ public class Game extends javax.swing.JFrame {
      * result|win - result win
      * result|lose - result lose
      */
-    void processMessage (String type, String data) {
+    boolean processMessage (String type, String data) {
         // set player sate
         if (type.equals("playerState")) {
             this.playerState = Integer.valueOf(data);
@@ -78,10 +81,13 @@ public class Game extends javax.swing.JFrame {
                 result = "Thua";
             }
             this.message.setText(result);
+            return true;
         }
+        
+        return false;
     }
     
-    void initClient () {
+    void start () {
         this.client = new Client("localhost", 9999, this);
         this.client.start();
     }
@@ -321,13 +327,9 @@ public class Game extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new Game().setVisible(true);
-            }
-        });
+        Game game = new Game();
+        game.setVisible(true);
+        game.start();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton box0;

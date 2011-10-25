@@ -12,7 +12,7 @@ import java.io.*;
  *
  * @author quanmt
  */
-public class Client extends SharedThread {
+public class Client extends SharedSocket {
 
     String host;
     int port;

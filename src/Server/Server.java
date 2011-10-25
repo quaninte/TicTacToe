@@ -12,7 +12,7 @@ import java.io.*;
  *
  * @author quanmt
  */
-public class Server extends SharedThread {
+public class Server extends SharedSocket {
 
     Server(Socket socket) {
         this.socket = socket;

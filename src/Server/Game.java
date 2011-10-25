@@ -67,14 +67,21 @@ public class Game {
         
         while (true) {
             String []parts = this.servers[this.currentTurn].read();
-            this.processMessage(parts[0], parts[1]);
+            
+            if (this.processMessage(parts[0], parts[1])) {
+                break;
+            }
             
             // next turn
             this.currentTurn = this.nextTurn();
         }
+        
+        
+        this.servers[0].close();
+        this.servers[1].close();
     }
     
-    void processMessage (String type, String data) {
+    boolean processMessage (String type, String data) {
         if (type.equals("chose")) {
             int index = Integer.valueOf(data);
             this.map[index] = this.currentTurn;
@@ -83,8 +90,12 @@ public class Game {
             if (this.isWon()) {
                 this.servers[this.currentTurn].send("result", "win");
                 this.servers[this.nextTurn()].send("result", "lose");
+                
+                return true;
             }
         }
+        
+        return false;
     }
     
     boolean isWon() {

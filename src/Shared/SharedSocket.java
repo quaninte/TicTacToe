@@ -6,12 +6,14 @@ package Shared;
 
 import java.net.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author quanmt
  */
-public abstract class SharedThread extends Thread {
+public abstract class SharedSocket {
     
     public Socket socket;
     public DataOutputStream os;
@@ -21,8 +23,7 @@ public abstract class SharedThread extends Thread {
         
     }
     
-    @Override
-    public void run() {
+    public void start() {
         
         try {
             os = new DataOutputStream(this.socket.getOutputStream());
@@ -48,17 +49,13 @@ public abstract class SharedThread extends Thread {
                     line = "";
                 }
                 
-                if (line.isEmpty()) {
-                    this.sleep(10);
-                } else {
+                if (!line.isEmpty()) {
                     System.out.println("Received: " + line);
                     
                     String[] parts = line.split("\\|");
                     return parts;
                 }
                 
-            } catch (InterruptedException e) {
-                System.err.println(e);
             } catch (IOException e) {
                 System.err.println(e);
             }
@@ -72,6 +69,20 @@ public abstract class SharedThread extends Thread {
             System.out.println("Sent: " + message);
         } catch (IOException e) {
             System.err.println(e);
+        }
+    }
+    
+    public void close()
+    {
+        try {
+            this.is.close();
+            this.os.close();
+            this.socket.close();
+            
+            System.out.println("socket closed");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(SharedSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
