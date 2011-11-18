@@ -88,7 +88,7 @@ public class Game extends javax.swing.JFrame {
     }
     
     void start () {
-        this.client = new Client("localhost", 9999, this);
+        this.client = new Client("localhost", 19999, this);
         this.client.start();
     }
     

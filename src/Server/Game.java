@@ -140,7 +140,7 @@ public class Game {
     }
     
     public static void main (String[] args) {
-        Game game = new Game(9999);
+        Game game = new Game(19999);
         game.start();
     }
 }
